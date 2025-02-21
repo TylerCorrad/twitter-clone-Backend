@@ -17,7 +17,7 @@ export class TwittsController {
   constructor(private readonly twittsService: TwittsService) {}
 
   @Post()
-  @Auth(ValidRoles.user) 
+  @Auth() 
   @ApiResponse({status: 201, description:'User Was Created', type: Twitt})
   @ApiResponse({status: 400, description:'Bad Request'})
   @ApiResponse({status: 403, description:'Token related'})
@@ -35,13 +35,13 @@ export class TwittsController {
   }
 
   @Get(':term')
-  @Auth(ValidRoles.user) 
+  @Auth() 
   findOne(@Param('term') term: string) {
     return this.twittsService.findOne(term);
   }
 
   @Patch(':id')
-  @Auth(ValidRoles.user) 
+  @Auth() 
   update(
     @Param('id', ParseUUIDPipe) id: string, 
     @Body() updateTwittDto: UpdateTwittDto,
@@ -51,7 +51,7 @@ export class TwittsController {
   }
 
   @Delete(':id')
-  @Auth(ValidRoles.user) 
+  @Auth() 
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.twittsService.remove(id);
   }
