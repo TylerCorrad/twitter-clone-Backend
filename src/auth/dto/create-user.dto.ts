@@ -1,0 +1,42 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { IsDateString, IsEmail, IsString, Matches, MaxLength, MinLength } from "class-validator";
+
+
+export class CreateUserDto{
+
+    @ApiProperty({
+        description: 'Email is required from the user to create an account',
+
+    })
+    @IsString()
+    @IsEmail()
+    email: string;
+
+
+    @ApiProperty({
+        description: 'It must be at least 6 character and have a Uppercase, lowercase letter and a number',
+
+    })
+    @IsString()
+    @MinLength(6)
+    @MaxLength(50)
+    @Matches(
+        /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+        message: 'The password must have a Uppercase, lowercase letter and a number'
+    })
+    password: string;
+
+    @ApiProperty()
+    @IsString()
+    @MinLength(3)
+    fullName: string;
+
+    @ApiProperty({
+        description: 'It must have date time structure', example: '2025-02-17'
+
+    })
+    @IsDateString()
+    birthday: Date;
+
+
+}
