@@ -1,14 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { LikedcommentsService } from './likedcomments.service';
-import { CreateLikedcommentDto } from './dto/create-likedcomment.dto';
-import { UpdateLikedcommentDto } from './dto/update-likedcomment.dto';
+
 
 @Controller('likedcomments')
 export class LikedcommentsController {
   constructor(private readonly likedcommentsService: LikedcommentsService) {}
 
   @Post()
-  create(@Body() createLikedcommentDto: CreateLikedcommentDto) {
+  create(@Body() createLikedcommentDto) {
     return this.likedcommentsService.create(createLikedcommentDto);
   }
 
@@ -23,7 +22,7 @@ export class LikedcommentsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLikedcommentDto: UpdateLikedcommentDto) {
+  update(@Param('id') id: string, @Body() updateLikedcommentDto) {
     return this.likedcommentsService.update(+id, updateLikedcommentDto);
   }
 
