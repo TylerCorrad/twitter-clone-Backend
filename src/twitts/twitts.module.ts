@@ -6,11 +6,12 @@ import { Twitt } from './entities/twitt.entity';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
+  imports: [
+    TypeOrmModule.forFeature([Twitt]),  // Registra Twitt como entidad
+    AuthModule,
+  ],
   controllers: [TwittsController],
   providers: [TwittsService],
-  imports:[
-    TypeOrmModule.forFeature([Twitt]),
-    AuthModule,
-  ]
+  exports: [TypeOrmModule],  // Exporta TypeOrmModule para que otros módulos puedan usar TwittRepository
 })
 export class TwittsModule {}

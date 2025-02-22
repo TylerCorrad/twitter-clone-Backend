@@ -1,8 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { User } from "src/auth/entities/user.entity";
 import { Twitt } from "src/twitts/entities/twitt.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from "typeorm";
 
 @Entity()
 export class Commentaries {
@@ -14,7 +13,6 @@ export class Commentaries {
     @PrimaryGeneratedColumn('uuid')
     comment_id: string;
 
-
     @ApiProperty({
         example: "Este es mi primer comentario!",
         description: "Contenido del comentario",
@@ -24,14 +22,13 @@ export class Commentaries {
         nullable: false
     })
     content: string;
-    
 
     @ApiProperty({
         example: "2024-02-21T15:30:00Z",
         description: "Fecha y hora en que se creó el comentario",
         type: String
     })
-    @CreateDateColumn({ type: 'timestamp', precision: 0 }) // el timestamp es para tiempo más exacto diferente a date
+    @CreateDateColumn({ type: 'timestamp', precision: 0 }) 
     createdAt: Date;
 
     @ApiProperty({
@@ -41,7 +38,6 @@ export class Commentaries {
     })
     @Column({ type: 'timestamp', precision: 0, nullable: true, default: null })
     EditedAt: Date | null;
-
 
     @ApiProperty({
         example: false,
@@ -53,18 +49,15 @@ export class Commentaries {
     })
     isEdited: boolean;
 
-    @ManyToOne(
-        ()=> User,
-        ( user ) => user.commentarie,
-        {eager:true}
-    )
-    user:User
+    @ManyToOne(() => Twitt, (twitt) => twitt.commentarie, { eager: true })
+        @JoinColumn({ name: 'twitt_id' })
+        twitt: Twitt;
 
-    @ManyToOne(
-        ()=> Twitt,
-        ( twitt ) => twitt.commentarie,
-        {eager:true},
-    )
-    twitt:Twitt
     
+    @ManyToOne(
+        () => User,
+        (user) => user.commentarie,
+        { eager: true }
+    )
+    user: User;
 }

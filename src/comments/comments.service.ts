@@ -14,23 +14,32 @@ export class CommentsService {
   constructor(
     @InjectRepository(Commentaries)
     private readonly commentRepository: Repository<Commentaries>,
-  ){}
-  async create(createCommentDto: CreateCommentDto, user: User, twitt: Twitt) {
-
+  
+    @InjectRepository(Twitt) // 👈 Inyecta el repositorio de Twitt
+    private readonly twittRepository: Repository<Twitt>,
+  ) {}
+  async create(createCommentDto: CreateCommentDto, user: User, twittId: string) {
     try {
+      // Busca el tweet al que se asociará el comentario
+      const twitt = await this.twittRepository.findOneBy({ twitt_id: twittId });
+  
+      if (!twitt) throw new NotFoundException(`Twitt with id ${twittId} not found`);
+  
+      // Crea el comentario con el tweet y el usuario
       const comment = this.commentRepository.create({
         ...createCommentDto,
         user,
-        twitt
+        twitt, // Asigna el tweet
       });
+  
       await this.commentRepository.save(comment);
       return comment;
-
-
+  
     } catch (error) {
-      throw new InternalServerErrorException('dominó')
+      throw new InternalServerErrorException('Error al crear comentario');
     }
   }
+  
 
   async findAll(paginationDto:PaginationDto) {
     const {limit=10, offset=0} = paginationDto;
@@ -82,6 +91,18 @@ export class CommentsService {
     }
   }
 
+  async findCommentsByTwittId(twittId: string) {
+    try {
+      const comments = await this.commentRepository.find({
+        where: { twitt: { twitt_id: twittId } },
+        relations: ['user', 'twitt'], 
+      });
+  
+      return comments;
+    } catch (error) {
+      throw new InternalServerErrorException('Error al obtener comentarios');
+    }
+  }
   async remove(id: string) {
     const comment = await this.findOne(id);
     await this.commentRepository.remove(comment);

@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Query
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { Auth } from 'src/auth/decorators/auth.decorator';
-import { ValidRoles } from 'src/auth/interfaces';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/entities/user.entity';
 import { CommentsService } from './comments.service';
@@ -17,18 +16,23 @@ import { Twitt } from 'src/twitts/entities/twitt.entity';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post(":twittId")
-  @Auth() 
-  @ApiResponse({status: 201, description:'User Was Created', type: Commentaries})
-  @ApiResponse({status: 400, description:'Bad Request'})
-  @ApiResponse({status: 403, description:'Token related'})
-  create(
-    @Body() createCommentDto: CreateCommentDto,
-    @GetUser() user: User,
-    @Param("twittId") twitt: Twitt
+@Post(":twittId")
+@Auth() 
+@ApiResponse({ status: 201, description: 'Comment was created', type: Commentaries })
+@ApiResponse({ status: 400, description: 'Bad Request' })
+@ApiResponse({ status: 403, description: 'Token related' })
+create(
+  @Param('twittId', ParseUUIDPipe) twittId: string,  // 👈 Añade el twittId como parámetro
+  @Body() createCommentDto: CreateCommentDto,
+  @GetUser() user: User,
+) {
+  return this.commentsService.create(createCommentDto, user, twittId); // 👈 Pasa el twittId al servicio
+}
 
-  ) {
-    return this.commentsService.create(createCommentDto, user,twitt);
+  @Get(':twittId')
+  @Auth() 
+  async findCommentsByTwittId(@Param('twittId') twittId: string) {
+    return this.commentsService.findCommentsByTwittId(twittId);
   }
 
   @Get()

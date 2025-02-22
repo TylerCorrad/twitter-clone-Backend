@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Commentaries } from "src/comments/entities/comment.entity";
 import { Twitt } from "src/twitts/entities/twitt.entity";
 import { Like } from "src/likes/entities/like.entity";
+import { Retweet } from "src/retweets/entities/retweet.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
@@ -80,6 +81,9 @@ export class User {
         (twitt) => twitt.user
     )
     twitt: Twitt;
+
+    @OneToMany(() => Retweet, (retweet) => retweet.user)
+    retweets: Retweet[];
 
     @OneToMany(
         () => Commentaries,

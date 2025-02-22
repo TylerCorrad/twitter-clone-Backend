@@ -56,5 +56,5 @@ export class TwittsController {
     return this.twittsService.remove(id);
   }
 
-  
+
 }

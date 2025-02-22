@@ -7,6 +7,7 @@ import { CommonModule } from './common/common.module';
 import { LikesModule } from './likes/likes.module';
 import { CommentsModule } from './comments/comments.module';
 import { LikedcommentsModule } from './likedcomments/likedcomments.module';
+import { RetweetsModule } from './retweets/retweets.module';
 
 @Module({
   imports: [
@@ -34,6 +35,8 @@ import { LikedcommentsModule } from './likedcomments/likedcomments.module';
     CommentsModule,
 
     LikedcommentsModule,
+
+    RetweetsModule,
   ],
 })
 export class AppModule {}
