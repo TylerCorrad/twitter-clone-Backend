@@ -82,6 +82,12 @@ export class AuthService {
     };
   }
 
+  async findByFullName(fullName: string): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: { fullName },
+      select: ['id', 'fullName', 'email', 'birthday', 'createdAt'],
+    });
+  }
 
   private getJwtToken(payload: JwtPayload){
 
