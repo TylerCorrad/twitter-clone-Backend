@@ -22,7 +22,6 @@ export class TwittsService {
         user,
       });
       await this.twittRepository.save(twitt);
-
       return twitt;
 
 
@@ -31,14 +30,21 @@ export class TwittsService {
     }
   }
 
-  async findAll(paginationDto:PaginationDto) {
-    const {limit=10, offset=0} = paginationDto;
-
-    return this.twittRepository.find({
-      take: limit,
-      skip: offset
-    })
-
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+  
+    return await this.twittRepository
+      .createQueryBuilder('twitt')
+      .leftJoinAndSelect('twitt.user', 'user') // Hace un JOIN con la tabla de usuarios
+      .select([
+        'twitt', // Selecciona todos los campos de Twitt
+        'user.id', // Selecciona el id del usuario
+        'user.fullName', // Selecciona el nombre completo del usuario
+      ])
+      .take(limit)
+      .skip(offset)
+      .orderBy('twitt.createdAt', 'DESC') // Ordena por fecha de creación
+      .getMany();
   }
 
   async findOne(term:string) {
