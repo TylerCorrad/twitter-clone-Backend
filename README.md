@@ -5,10 +5,12 @@
 # FAKE TWITTER API
 
 1. Clonar proyecto
-2. ``` yarn install ```
-3. Clonar el archivo ```.env.template``` y renombrarlo a ```.env```
-4. Cambiar las variables de entorno
-5. Levantar la base de datos
+2. Tener NodeJS LTS Instalado
+3. ejecutar npm install -g yarn (Para instalar yarn)
+4. ``` yarn install ``` Para instalar las librerias necesarias
+5. Clonar el archivo ```.env.template``` y renombrarlo a ```.env```
+6. Cambiar las variables de entorno
+7. Levantar la base de datos con el siguiente comando: (Descargue la imagen de Postgres version 14.3 en docker)
 ```
 docker-compose up -d
 ```
