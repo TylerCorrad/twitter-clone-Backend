@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Commentaries } from "src/comments/entities/comment.entity";
 import { Twitt } from "src/twitts/entities/twitt.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -79,6 +80,13 @@ export class User {
         
     )
     twitt: Twitt;
+
+    @OneToMany(
+        () => Commentaries,
+        (commentarie) => commentarie.user
+        
+    )
+    commentarie: Commentaries;
 
     @BeforeInsert()
     checkFieldsBeforeInsert() {

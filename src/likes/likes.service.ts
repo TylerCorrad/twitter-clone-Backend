@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLikeDto } from './dto/create-like.dto';
-import { UpdateLikeDto } from './dto/update-like.dto';
+
 
 @Injectable()
 export class LikesService {
-  create(createLikeDto: CreateLikeDto) {
+  create(createLikeDto) { //RECUERDA QUE QUITASTE EL CREATELIKEDTO: CREATELIKEDTO
     return 'This action adds a new like';
   }
 
@@ -16,7 +15,7 @@ export class LikesService {
     return `This action returns a #${id} like`;
   }
 
-  update(id: number, updateLikeDto: UpdateLikeDto) {
+  update(id: number, updateLikeDto) {
     return `This action updates a #${id} like`;
   }
 

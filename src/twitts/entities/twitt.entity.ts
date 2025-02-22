@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { User } from "src/auth/entities/user.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Commentaries } from "src/comments/entities/comment.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Twitt {
@@ -56,5 +57,12 @@ export class Twitt {
         {eager:true}
     )
     user:User
+
+    @OneToMany(
+            () => Commentaries,
+            (commentarie) => commentarie.twitt
+            
+        )
+        commentarie: Commentaries;
 }
 
