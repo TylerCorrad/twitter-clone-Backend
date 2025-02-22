@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { User } from "src/auth/entities/user.entity";
 import { Commentaries } from "src/comments/entities/comment.entity";
+import { Like } from "src/likes/entities/like.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -19,9 +20,7 @@ export class Twitt {
         description: "Contenido del tweet",
         minLength: 1
     })
-    @Column('text', {
-        nullable: false
-    })
+    @Column('text', { nullable: false })
     content: string;
 
     @ApiProperty({
@@ -29,7 +28,7 @@ export class Twitt {
         description: "Fecha y hora en que se creó el tweet",
         type: String
     })
-    @CreateDateColumn({ type: 'timestamp', precision: 0 }) // el timestamp es para tiempo más exacto diferente a date
+    @CreateDateColumn()
     createdAt: Date;
 
     @ApiProperty({
@@ -37,32 +36,23 @@ export class Twitt {
         description: "Fecha y hora en que se edita el tweet",
         type: String
     })
-    @Column({ type: 'timestamp', precision: 0, nullable: true, default: null })
+    @Column({ type: 'timestamp', nullable: true, default: null })
     EditedAt: Date | null;
-
 
     @ApiProperty({
         example: false,
         description: "Indica si el tweet ha sido editado o no",
         default: false
     })
-    @Column('bool', {
-        default: false
-    })
+    @Column('bool', { default: false })
     isEdited: boolean;
 
-    @ManyToOne(
-        ()=> User,
-        ( user ) => user.twitt,
-        {eager:true}
-    )
-    user:User
+    @ManyToOne(() => User, (user) => user.twitt, { eager: true })
+    user: User;
 
-    @OneToMany(
-            () => Commentaries,
-            (commentarie) => commentarie.twitt
-            
-        )
-        commentarie: Commentaries;
+    @OneToMany(() => Commentaries, (commentarie) => commentarie.twitt)
+    commentarie: Commentaries;
+
+    @OneToMany(() => Like, (like) => like.twitt)
+    likes: Like[];
 }
-

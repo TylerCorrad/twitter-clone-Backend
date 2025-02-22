@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Commentaries } from "src/comments/entities/comment.entity";
 import { Twitt } from "src/twitts/entities/twitt.entity";
+import { Like } from "src/likes/entities/like.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
@@ -77,16 +78,20 @@ export class User {
     @OneToMany(
         () => Twitt,
         (twitt) => twitt.user
-        
     )
     twitt: Twitt;
 
     @OneToMany(
         () => Commentaries,
         (commentarie) => commentarie.user
-        
     )
     commentarie: Commentaries;
+
+    @OneToMany(
+        () => Like,
+        (like) => like.user
+    )
+    likes: Like[];
 
     @BeforeInsert()
     checkFieldsBeforeInsert() {

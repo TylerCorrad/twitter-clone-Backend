@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from "typeorm";
+import { User } from "src/auth/entities/user.entity";
+import { Twitt } from "src/twitts/entities/twitt.entity";
 
 @Entity()
 export class Like {
@@ -11,4 +12,13 @@ export class Like {
     })
     @PrimaryGeneratedColumn('uuid')
     like_id: string;
+
+    @ManyToOne(() => User, (user) => user.likes, { onDelete: "CASCADE" })
+    user: User;
+
+    @ManyToOne(() => Twitt, (twitt) => twitt.likes, { onDelete: "CASCADE" })
+    twitt: Twitt;
+
+    @CreateDateColumn()
+    createdAt: Date;
 }
