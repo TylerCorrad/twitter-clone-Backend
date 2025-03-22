@@ -11,5 +11,5 @@ export class Retweet {
   user: User;
 
   @ManyToOne(() => Twitt, (twitt) => twitt.retweets, { eager: true })
-  twitt: Twitt;
+  originalTwitt: Twitt;
 }

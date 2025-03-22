@@ -57,6 +57,10 @@ export class Twitt {
     @OneToMany(() => Like, (like) => like.twitt)
     likes: Like[];
 
-    @OneToMany(() => Retweet, (retweet) => retweet.twitt)
-    retweets: Retweet[];
+    @OneToMany(() => Retweet, (retweet) => retweet.originalTwitt)
+
+    @ManyToOne(() => Twitt, (twitt) => twitt.retweets, { nullable: true, onDelete: 'CASCADE' })
+  originalTwitt?: Twitt; 
+  
+retweets: Retweet[];
 }

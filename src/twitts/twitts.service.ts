@@ -90,6 +90,35 @@ export class TwittsService {
   async remove(id: string) {
     const twitt = await this.findOne(id);
     await this.twittRepository.remove(twitt);
-
   }
+
+  async retweet(twittId: string, user: User): Promise<Twitt> {
+    const originalTwitt = await this.twittRepository.findOne({
+      where: { twitt_id: twittId },
+      relations: ['user'], // Cargar el usuario del tweet original
+    });
+  
+    if (!originalTwitt) {
+      throw new NotFoundException('Tweet no encontrado');
+    }
+  
+    // Verificar si el usuario ya hizo retweet de este tweet
+    const existingRetweet = await this.twittRepository.findOne({
+      where: { user, originalTwitt },
+    });
+  
+    if (existingRetweet) {
+      throw new Error('Ya has retwitteado este tweet');
+    }
+  
+    const retweet = this.twittRepository.create({
+      user,
+      originalTwitt,
+    });
+  
+    await this.twittRepository.save(retweet);
+    return retweet;
+  }
+  
+  
 }

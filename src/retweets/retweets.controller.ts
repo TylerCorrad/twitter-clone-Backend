@@ -1,20 +1,21 @@
-import { Controller, Post, Get, Param, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { RetweetsService } from './retweets.service';
-import { AuthGuard } from '@nestjs/passport';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { User } from 'src/auth/entities/user.entity';
 
 @Controller('retweets')
 export class RetweetsController {
   constructor(private readonly retweetsService: RetweetsService) {}
 
-  @UseGuards(AuthGuard('jwt'))
-  @Post(':twittId')
-  async retweet(@Request() req, @Param('twittId') twittId: string) {
-    return this.retweetsService.retweet(req.user, twittId);
+  @Post(':id')
+  @Auth()
+  retweet(@Param('id', ParseUUIDPipe) id: string, @GetUser() user: User) {
+    return this.retweetsService.create(id, user);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('user')
-  async getUserRetweets(@Request() req) {
-    return this.retweetsService.getUserRetweets(req.user.id);
+  @Get()
+  findAll() {
+    return this.retweetsService.findAll();
   }
 }

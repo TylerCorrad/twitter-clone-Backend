@@ -56,5 +56,13 @@ export class TwittsController {
     return this.twittsService.remove(id);
   }
 
+  @Post(':id/retweet')
+  @Auth()
+  retweet(@Param('id', ParseUUIDPipe) id: string, @GetUser() user: User) {
+    return this.twittsService.retweet(id, user);
+  }
+  
+
+
 
 }
